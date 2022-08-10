@@ -15,6 +15,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'MyExpenses',
+      theme: ThemeData(
+          primarySwatch: Colors.cyan,
+          accentColor: Colors.amber,
+          fontFamily: 'QuickSand',
+          textTheme: ThemeData.light().textTheme.copyWith(
+              headline6: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold)),
+          appBarTheme: AppBarTheme(
+              titleTextStyle: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold))),
       home: HomePage(),
     );
   }
@@ -27,8 +41,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final List<Tx> _listTxs = [
-    Tx(id: 'Tx1', name: 'Food', amount: 299.23, date: DateTime.now()),
-    Tx(id: 'Tx2', name: 'Videogame: MW2', amount: 129.99, date: DateTime.now()),
+    //Tx(id: 'Tx1', name: 'Food', amount: 299.23, date: DateTime.now()),
+    //Tx(id: 'Tx2', name: 'Videogame: MW2', amount: 129.99, date: DateTime.now()),
   ];
 
   void _addNewTx(String name, double amount) {
