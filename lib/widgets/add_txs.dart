@@ -1,12 +1,33 @@
 import 'package:flutter/material.dart';
 
-class AddTxs extends StatelessWidget {
-  final nameController = TextEditingController();
-  final amountController = TextEditingController();
-
+class AddTxs extends StatefulWidget {
   final Function addNewTx;
 
+  //se acepta
   AddTxs(this.addNewTx);
+
+  @override
+  State<AddTxs> createState() => _AddTxsState();
+}
+
+class _AddTxsState extends State<AddTxs> {
+  final nameController = TextEditingController();
+
+  final amountController = TextEditingController();
+
+  void submit() {
+    final inputName = nameController.text;
+    final inputAmount = double.parse(amountController.text);
+
+    if (inputName.isEmpty || inputAmount <= 0)
+      return;
+    else
+      //widget. recovers the Function received from the class into the State class
+      widget.addNewTx(nameController.text, double.parse(amountController.text));
+
+    //Navigator's pop method to close the topmost screen displayed.
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,20 +38,17 @@ class AddTxs extends StatelessWidget {
           child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
             TextField(
               decoration: InputDecoration(labelText: 'Name'),
-              //onChanged: (value) {
-              //nameInput = value;
-              //},
               controller: nameController,
+              onSubmitted: (_) => submit(),
             ),
             TextField(
               decoration: InputDecoration(labelText: 'Amount'),
               controller: amountController,
+              keyboardType: TextInputType.number,
+              onSubmitted: (_) => submit(),
             ),
             FlatButton(
-              onPressed: () {
-                addNewTx(
-                    nameController.text, double.parse(amountController.text));
-              },
+              onPressed: submit,
               child: Text('Add'),
               textColor: Colors.blueGrey,
             )
