@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 //3rd party imports
 
 //my imports
-import './models/tx.dart';
 import './widgets/txs_list.dart';
 import './widgets/add_txs.dart';
+import './widgets/chart.dart';
+import './models/tx.dart';
 
 void main() => runApp(MyApp());
 
@@ -44,6 +45,12 @@ class _HomePageState extends State<HomePage> {
     //Tx(id: 'Tx1', name: 'Food', amount: 299.23, date: DateTime.now()),
     //Tx(id: 'Tx2', name: 'Videogame: MW2', amount: 129.99, date: DateTime.now()),
   ];
+
+  List<Tx> get _recentTx {
+    return _listTxs.where((tx) {
+      return tx.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
+  }
 
   void _addNewTx(String name, double amount) {
     final newTx = Tx(
@@ -88,13 +95,7 @@ class _HomePageState extends State<HomePage> {
             //mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
-                width: double.infinity,
-                child: Card(
-                  color: Colors.blue,
-                  child: Text('GRÁFICO'),
-                ),
-              ),
+              Chart(_recentTx),
               TxsList(_listTxs),
             ]),
       ),
