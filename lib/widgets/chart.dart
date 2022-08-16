@@ -46,18 +46,25 @@ class Chart extends StatelessWidget {
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: groupedTxs.map((data) {
-          return Flexible(
-              fit: FlexFit.tight,
-              child: ChartBar(
-                  data['day'] as String,
-                  data['amount'] as double,
-                  maxAmountSpent == 0.0
-                      ? 0.0
-                      : (data['amount'] as double) / maxAmountSpent));
-        }).toList(),
+      //if we want to add a Container to add padding
+      //it is possible to use the Padding widget
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: groupedTxs.map((data) {
+            return Flexible(
+                //flexfit value: loose, tight
+                //flex, distribute more space for a child
+                fit: FlexFit.tight,
+                child: ChartBar(
+                    data['day'] as String,
+                    data['amount'] as double,
+                    maxAmountSpent == 0.0
+                        ? 0.0
+                        : (data['amount'] as double) / maxAmountSpent));
+          }).toList(),
+        ),
       ),
     );
   }

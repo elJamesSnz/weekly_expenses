@@ -35,6 +35,36 @@ class TxsList extends StatelessWidget {
               //what's going to be printent onto the screen
               itemBuilder: (context, index) {
                 return Card(
+                  elevation: 3,
+                  margin: EdgeInsets.symmetric(vertical: 9, horizontal: 7),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: Padding(
+                        padding: EdgeInsets.all(7),
+                        child: FittedBox(
+                          child: Text('\$${listTxs[index].amount}'),
+                        ),
+                      ),
+                    ),
+                    title: Text(
+                      listTxs[index].name,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    subtitle:
+                        Text(DateFormat.yMMM().format(listTxs[index].date)),
+                  ),
+                );
+              },
+              //map to paint n widgets,
+            ),
+    );
+  }
+}
+
+/*
+
+ return Card(
                   child: Row(
                     children: [
                       Container(
@@ -69,9 +99,5 @@ class TxsList extends StatelessWidget {
                     ],
                   ),
                 );
-              },
-              //map to paint n widgets,
-            ),
-    );
-  }
-}
+
+ */
