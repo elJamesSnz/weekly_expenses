@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: Colors.cyan,
           accentColor: Colors.amber,
+          errorColor: Colors.redAccent,
           fontFamily: 'QuickSand',
           textTheme: ThemeData.light().textTheme.copyWith(
               headline6: TextStyle(
@@ -62,6 +63,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _deleteTx(String id) {
+    setState(() {
+      //removes qhere condition is met
+      _listTxs.removeWhere((tx) => tx.id == id);
+    });
+  }
+
   void _modalNewTx(BuildContext ctx) {
     showModalBottomSheet(
       context: ctx,
@@ -94,7 +102,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Chart(_recentTx),
-              TxsList(_listTxs),
+              TxsList(_listTxs, _deleteTx),
             ]),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

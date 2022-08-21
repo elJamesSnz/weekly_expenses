@@ -7,12 +7,14 @@ import '../models/tx.dart';
 class TxsList extends StatelessWidget {
   final List<Tx> listTxs;
 
-  TxsList(this.listTxs);
+  final Function deleteTx;
+
+  TxsList(this.listTxs, this.deleteTx);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 400,
       child: listTxs.isEmpty
           ? Column(
               children: [
@@ -29,6 +31,7 @@ class TxsList extends StatelessWidget {
                 )
               ],
             )
+          //listview has infinite height
           : ListView.builder(
               //how many times will the process be done
               itemCount: listTxs.length,
@@ -53,6 +56,12 @@ class TxsList extends StatelessWidget {
                     ),
                     subtitle:
                         Text(DateFormat.yMMM().format(listTxs[index].date)),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      color: Theme.of(context).errorColor,
+                      //since is requieres an argument it is wrap in an anonym funct
+                      onPressed: () => deleteTx(listTxs[index].id),
+                    ),
                   ),
                 );
               },
