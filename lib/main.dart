@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
               headline6: TextStyle(
                   fontFamily: 'OpenSans',
                   fontSize: 18,
-                  fontWeight: FontWeight.bold)),
+                  fontWeight: FontWeight.bold),
+              button: TextStyle(color: Colors.white)),
           appBarTheme: AppBarTheme(
               titleTextStyle: TextStyle(
                   fontFamily: 'OpenSans',
@@ -52,12 +53,9 @@ class _HomePageState extends State<HomePage> {
     }).toList();
   }
 
-  void _addNewTx(String name, double amount) {
+  void _addNewTx(String name, double amount, DateTime date) {
     final newTx = Tx(
-        id: DateTime.now().toString(),
-        name: name,
-        amount: amount,
-        date: DateTime.now());
+        id: DateTime.now().toString(), name: name, amount: amount, date: date);
     setState(() {
       //adding the element into the list
       _listTxs.add(newTx);
