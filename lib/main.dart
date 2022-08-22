@@ -1,5 +1,6 @@
 //flutter imports
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 //3rd party imports
 
@@ -9,7 +10,14 @@ import './widgets/add_txs.dart';
 import './widgets/chart.dart';
 import './models/tx.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  //Ensuring orientation lock works in all devices
+  //WidgetsFlutterBinding.ensureInitialized();
+  //Locking the device orientarion.
+  // SystemChrome.setPreferredOrientations(
+  //   [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -43,6 +51,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _chart = false;
   final List<Tx> _listTxs = [
     //Tx(id: 'Tx1', name: 'Food', amount: 299.23, date: DateTime.now()),
     //Tx(id: 'Tx2', name: 'Videogame: MW2', amount: 129.99, date: DateTime.now()),
@@ -87,6 +96,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final mobileInLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     final appBar = AppBar(
       title: Text('Expenses'),
       actions: [
@@ -94,26 +106,52 @@ class _HomePageState extends State<HomePage> {
         IconButton(onPressed: () => _modalNewTx(context), icon: Icon(Icons.add))
       ],
     );
+
+    final txList = Container(
+        height: (MediaQuery.of(context).size.height -
+                appBar.preferredSize.height -
+                MediaQuery.of(context).padding.top) *
+            .7,
+        child: TxsList(_listTxs, _deleteTx));
+
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
-        child: Column(
-            //mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                  height: (MediaQuery.of(context).size.height -
-                          appBar.preferredSize.height -
-                          MediaQuery.of(context).padding.top) *
-                      .3,
-                  child: Chart(_recentTx)),
-              Container(
-                  height: (MediaQuery.of(context).size.height -
-                          appBar.preferredSize.height -
-                          MediaQuery.of(context).padding.top) *
-                      .7,
-                  child: TxsList(_listTxs, _deleteTx)),
-            ]),
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          if (mobileInLandscape)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Chart'),
+                Switch(
+                  value: _chart,
+                  onChanged: (value) {
+                    setState(() {
+                      _chart = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+          if (!mobileInLandscape)
+            Container(
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    .3,
+                child: Chart(_recentTx)),
+          if (!mobileInLandscape) txList,
+          if (mobileInLandscape)
+            _chart
+                ? Container(
+                    height: (MediaQuery.of(context).size.height -
+                            appBar.preferredSize.height -
+                            MediaQuery.of(context).padding.top) *
+                        .7,
+                    child: Chart(_recentTx))
+                : txList,
+        ]),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(

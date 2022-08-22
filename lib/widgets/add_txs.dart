@@ -57,48 +57,55 @@ class _AddTxsState extends State<AddTxs> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Container(
-          padding: EdgeInsets.all(10),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-            TextField(
-              decoration: InputDecoration(labelText: 'Name'),
-              controller: _nameController,
-              onSubmitted: (_) => _submit(),
-            ),
-            TextField(
-              decoration: InputDecoration(labelText: 'Amount'),
-              controller: _amountController,
-              keyboardType: TextInputType.number,
-              onSubmitted: (_) => _submit(),
-            ),
-            Container(
-              height: 70,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _date == null
-                        ? Text('No date selected')
-                        : Text('Date: ${DateFormat.yMd().format(_date!)}'),
-                  ),
-                  FlatButton(
-                      textColor: Theme.of(context).primaryColor,
-                      onPressed: _DatePicker,
-                      child: Text(
-                        'Choose date',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ))
-                ],
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Container(
+            padding: EdgeInsets.only(
+                top: 10,
+                left: 10,
+                right: 10,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 10),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+              TextField(
+                decoration: InputDecoration(labelText: 'Name'),
+                controller: _nameController,
+                onSubmitted: (_) => _submit(),
               ),
-            ),
-            RaisedButton(
-              onPressed: _submit,
-              child: Text('Add'),
-              textColor: Theme.of(context).textTheme.button!.color,
-              color: Theme.of(context).primaryColor,
-            )
-          ])),
+              TextField(
+                decoration: InputDecoration(labelText: 'Amount'),
+                controller: _amountController,
+                keyboardType: TextInputType.number,
+                onSubmitted: (_) => _submit(),
+              ),
+              Container(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _date == null
+                          ? Text('No date selected')
+                          : Text('Date: ${DateFormat.yMd().format(_date!)}'),
+                    ),
+                    FlatButton(
+                        textColor: Theme.of(context).primaryColor,
+                        onPressed: _DatePicker,
+                        child: Text(
+                          'Choose date',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ))
+                  ],
+                ),
+              ),
+              RaisedButton(
+                onPressed: _submit,
+                child: Text('Add'),
+                textColor: Theme.of(context).textTheme.button!.color,
+                color: Theme.of(context).primaryColor,
+              )
+            ])),
+      ),
     );
   }
 }

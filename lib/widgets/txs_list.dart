@@ -14,20 +14,24 @@ class TxsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return listTxs.isEmpty
-        ? Column(
-            children: [
-              Text(
-                'No Tx yet',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Container(
-                height: 200,
-                child: Image.asset(
-                  'assets/images/waiting.png',
-                  fit: BoxFit.cover,
-                ),
-              )
-            ],
+        ? LayoutBuilder(
+            builder: (context, constraints) {
+              return Column(
+                children: [
+                  Text(
+                    'No Tx yet',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  Container(
+                    height: constraints.maxHeight * .6,
+                    child: Image.asset(
+                      'assets/images/waiting.png',
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                ],
+              );
+            },
           )
         //listview has infinite height
         : ListView.builder(
@@ -53,12 +57,18 @@ class TxsList extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline6,
                   ),
                   subtitle: Text(DateFormat.yMMM().format(listTxs[index].date)),
-                  trailing: IconButton(
-                    icon: Icon(Icons.delete),
-                    color: Theme.of(context).errorColor,
-                    //since is requieres an argument it is wrap in an anonym funct
-                    onPressed: () => deleteTx(listTxs[index].id),
-                  ),
+                  trailing: MediaQuery.of(context).size.width > 450
+                      ? FlatButton.icon(
+                          onPressed: () => deleteTx(listTxs[index].id),
+                          icon: Icon(Icons.delete),
+                          textColor: Theme.of(context).errorColor,
+                          label: Text('del'))
+                      : IconButton(
+                          icon: Icon(Icons.delete),
+                          color: Theme.of(context).errorColor,
+                          //since is requieres an argument it is wrap in an anonym funct
+                          onPressed: () => deleteTx(listTxs[index].id),
+                        ),
                 ),
               );
             },
