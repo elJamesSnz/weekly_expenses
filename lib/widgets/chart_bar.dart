@@ -13,45 +13,53 @@ class ChartBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        //FittedBox forces its child in available space and may shrink texts
-        Container(
-            height: 20,
-            child:
-                FittedBox(child: Text('\$${spentAmount.toStringAsFixed(0)}'))),
-        SizedBox(
-          height: 4,
-        ),
-        Container(
-          height: 60,
-          width: 10,
-          child: Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 1.0),
-                  color: Color.fromRGBO(220, 220, 220, 1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-              //values from 0 to 1 where 1 is 100% of container value
-              FractionallySizedBox(
-                heightFactor: spentPct,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-              ),
-            ],
+    //layoutbuilder w constriants in order to dynamically know height
+    //and width avialble within a custom widget
+
+    return LayoutBuilder(builder: ((context, constraints) {
+      return Column(
+        children: [
+          //FittedBox forces its child in available space and may shrink texts
+          Container(
+              height: constraints.maxHeight * .15,
+              child: FittedBox(
+                  child: Text('\$${spentAmount.toStringAsFixed(0)}'))),
+          SizedBox(
+            height: constraints.maxHeight * .05,
           ),
-        ),
-        SizedBox(
-          height: 4,
-        ),
-        Text(labelTxt),
-      ],
-    );
+          Container(
+            //know height from constraints
+            height: constraints.maxHeight * .6,
+            width: 10,
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey, width: 1.0),
+                    color: Color.fromRGBO(220, 220, 220, 1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                //values from 0 to 1 where 1 is 100% of container value
+                FractionallySizedBox(
+                  heightFactor: spentPct,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: constraints.maxHeight * .05,
+          ),
+          Container(
+              height: constraints.maxHeight * .15,
+              child: FittedBox(child: Text(labelTxt))),
+        ],
+      );
+    }));
   }
 }

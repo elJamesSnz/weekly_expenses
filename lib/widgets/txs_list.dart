@@ -13,61 +13,57 @@ class TxsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 400,
-      child: listTxs.isEmpty
-          ? Column(
-              children: [
-                Text(
-                  'No Tx yet',
-                  style: Theme.of(context).textTheme.headline6,
+    return listTxs.isEmpty
+        ? Column(
+            children: [
+              Text(
+                'No Tx yet',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              Container(
+                height: 200,
+                child: Image.asset(
+                  'assets/images/waiting.png',
+                  fit: BoxFit.cover,
                 ),
-                Container(
-                  height: 200,
-                  child: Image.asset(
-                    'assets/images/waiting.png',
-                    fit: BoxFit.cover,
-                  ),
-                )
-              ],
-            )
-          //listview has infinite height
-          : ListView.builder(
-              //how many times will the process be done
-              itemCount: listTxs.length,
-              //what's going to be printent onto the screen
-              itemBuilder: (context, index) {
-                return Card(
-                  elevation: 3,
-                  margin: EdgeInsets.symmetric(vertical: 9, horizontal: 7),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 30,
-                      child: Padding(
-                        padding: EdgeInsets.all(7),
-                        child: FittedBox(
-                          child: Text('\$${listTxs[index].amount}'),
-                        ),
+              )
+            ],
+          )
+        //listview has infinite height
+        : ListView.builder(
+            //how many times will the process be done
+            itemCount: listTxs.length,
+            //what's going to be printent onto the screen
+            itemBuilder: (context, index) {
+              return Card(
+                elevation: 3,
+                margin: EdgeInsets.symmetric(vertical: 9, horizontal: 7),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    radius: 30,
+                    child: Padding(
+                      padding: EdgeInsets.all(7),
+                      child: FittedBox(
+                        child: Text('\$${listTxs[index].amount}'),
                       ),
                     ),
-                    title: Text(
-                      listTxs[index].name,
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    subtitle:
-                        Text(DateFormat.yMMM().format(listTxs[index].date)),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      color: Theme.of(context).errorColor,
-                      //since is requieres an argument it is wrap in an anonym funct
-                      onPressed: () => deleteTx(listTxs[index].id),
-                    ),
                   ),
-                );
-              },
-              //map to paint n widgets,
-            ),
-    );
+                  title: Text(
+                    listTxs[index].name,
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                  subtitle: Text(DateFormat.yMMM().format(listTxs[index].date)),
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete),
+                    color: Theme.of(context).errorColor,
+                    //since is requieres an argument it is wrap in an anonym funct
+                    onPressed: () => deleteTx(listTxs[index].id),
+                  ),
+                ),
+              );
+            },
+            //map to paint n widgets,
+          );
   }
 }
 
