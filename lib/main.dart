@@ -1,4 +1,6 @@
+import 'dart:io';
 //flutter imports
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -96,35 +98,52 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final mobileInLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    //to prevent asking for MediaQuery data
+    final mediaQuery = MediaQuery.of(context);
 
-    final appBar = AppBar(
-      title: Text('Expenses'),
-      actions: [
-        //list-of-widgets
-        IconButton(onPressed: () => _modalNewTx(context), icon: Icon(Icons.add))
-      ],
-    );
+    final mobileInLandscape = mediaQuery.orientation == Orientation.landscape;
+
+    final PreferredSizeWidget appBar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: Text('Expenses'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  child: Icon(CupertinoIcons.add),
+                  onTap: () => _modalNewTx(context),
+                )
+              ],
+            ),
+          )
+        : AppBar(
+            title: Text('Expenses'),
+            actions: [
+              //list-of-widgets
+              IconButton(
+                  onPressed: () => _modalNewTx(context), icon: Icon(Icons.add))
+            ],
+          ) as PreferredSizeWidget;
 
     final txList = Container(
-        height: (MediaQuery.of(context).size.height -
-                appBar.preferredSize.height -
-                MediaQuery.of(context).padding.top) *
-            .7,
+        height: mediaQuery.size.height -
+            appBar.preferredSize.height -
+            mediaQuery.padding.top * .7,
         child: TxsList(_listTxs, _deleteTx));
 
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
+    final appBody = SafeArea(
+      child: SingleChildScrollView(
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           if (mobileInLandscape)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Chart'),
-                Switch(
+                Text(
+                  'Chart',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                Switch.adaptive(
                   value: _chart,
                   onChanged: (value) {
                     setState(() {
@@ -136,28 +155,37 @@ class _HomePageState extends State<HomePage> {
             ),
           if (!mobileInLandscape)
             Container(
-                height: (MediaQuery.of(context).size.height -
+                height: (mediaQuery.size.height -
                         appBar.preferredSize.height -
-                        MediaQuery.of(context).padding.top) *
+                        mediaQuery.padding.top) *
                     .3,
                 child: Chart(_recentTx)),
           if (!mobileInLandscape) txList,
           if (mobileInLandscape)
             _chart
                 ? Container(
-                    height: (MediaQuery.of(context).size.height -
+                    height: (mediaQuery.size.height -
                             appBar.preferredSize.height -
-                            MediaQuery.of(context).padding.top) *
+                            mediaQuery.padding.top) *
                         .7,
                     child: Chart(_recentTx))
                 : txList,
         ]),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _modalNewTx(context),
-      ),
     );
+
+    return Platform.isIOS
+        ? CupertinoPageScaffold(child: appBody)
+        : Scaffold(
+            appBar: appBar,
+            body: appBody,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () => _modalNewTx(context),
+                  ));
   }
 }

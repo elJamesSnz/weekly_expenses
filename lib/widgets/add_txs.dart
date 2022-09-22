@@ -1,5 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+
 import 'package:intl/intl.dart';
+import 'package:weekly_expenses/widgets/adaptive_btn.dart';
 
 class AddTxs extends StatefulWidget {
   final Function addNewTx;
@@ -58,7 +62,7 @@ class _AddTxsState extends State<AddTxs> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Card(
+      child: Card( 
         elevation: 5,
         child: Container(
             padding: EdgeInsets.only(
@@ -88,13 +92,7 @@ class _AddTxsState extends State<AddTxs> {
                           ? Text('No date selected')
                           : Text('Date: ${DateFormat.yMd().format(_date!)}'),
                     ),
-                    FlatButton(
-                        textColor: Theme.of(context).primaryColor,
-                        onPressed: _DatePicker,
-                        child: Text(
-                          'Choose date',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ))
+                    AdaptiveBtn("Choose date", _DatePicker),
                   ],
                 ),
               ),
