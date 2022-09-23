@@ -9,7 +9,9 @@ class ChartBar extends StatelessWidget {
   final double spentPct;
 
   //constructor w/ named arguments
-  ChartBar(this.labelTxt, this.spentAmount, this.spentPct);
+  //const allows to mantein the instance with const-inmutable
+  // atts for better performance
+  const ChartBar(this.labelTxt, this.spentAmount, this.spentPct);
 
   @override
   Widget build(BuildContext context) {
